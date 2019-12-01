@@ -86,23 +86,23 @@ class SimpleController1(app_manager.RyuApp):
             match=match,
             actions=actions)
 
-        ##########################################################################
-        # Modify this part in "controller.py" not in "SimpleController.py".      #
-        # The example code shows the forwarding rules as following the figure.   #
-        #                                                                        #
-        # ex.    h1 <===> s1 <===> s4 <===> h2                                   #
-        #                                                                        #
-        #                                                                        #
-        #                 s2       s3                                            #
-        #------------------------------------------------------------------------#
-        # [TODO] Define the new forwarding rules. (Figure on slide p.29)         #
-        #                                                                        #
-        #        h1 <===> s1 ----> s4 <===> h2                                   #
-        #                  ^        |                                            #
-        #                  |        v                                            #
-        #                 s2 <---- s3                                            #
-        #                                                                        #
-        ##########################################################################
+        ############################################################################
+        ## Modify this part in "controller.py" not in "SimpleController.py".      ##
+        ## The example code shows the forwarding rules as the following figure.   ##
+        ##                                                                        ##
+        ## ex.    h1 <===> s1 <===> s4 <===> h2                                   ##
+        ##                                                                        ##
+        ##                                                                        ##
+        ##                 s2       s3                                            ##
+        ##------------------------------------------------------------------------##
+        ## [TODO] Define the new forwarding rules. (Figure on slide p.29)         ##
+        ##                                                                        ##
+        ##        h1 <===> s1 ----> s4 <===> h2                                   ##
+        ##                  ^        |                                            ##
+        ##                  |        v                                            ##
+        ##                 s2 <---- s3                                            ##
+        ##                                                                        ##
+        ############################################################################
 
         # TODO section BEGIN -----------------------------------------------------
 
