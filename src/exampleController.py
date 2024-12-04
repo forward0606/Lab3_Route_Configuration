@@ -85,22 +85,31 @@ class SimpleController1(app_manager.RyuApp):
             priority=0,
             match=match,
             actions=actions)
+        
+        # Deal with arp protocol
+        # Warning: may cause flooding
+        match = parser.OFPMatch(
+            eth_type=0x0806,
+        )
+        actions = [parser.OFPActionOutput(ofproto.OFPP_FLOOD)]
+        self.add_flow(
+            datapath=datapath,
+            priority=5000,
+            match=match,
+            actions=actions)
+
 
         ############################################################################
         ## Modify this part in "controller.py" not in "SimpleController.py".      ##
         ## The example code shows the forwarding rules as the following figure.   ##
         ##                                                                        ##
-        ## ex.    h1 <===> s1 <===> s4 <===> h2                                   ##
+        ## ex.    h1 <===> s1 <===> h2                                            ##
         ##                                                                        ##
         ##                                                                        ##
-        ##                 s2       s3                                            ##
         ##------------------------------------------------------------------------##
         ## [TODO] Define the new forwarding rules. (Figure on slide p.29)         ##
         ##                                                                        ##
-        ##        h1 <===> s1 ----> s4 <===> h2                                   ##
-        ##                  ^        |                                            ##
-        ##                  |        v                                            ##
-        ##                 s2 <---- s3                                            ##
+        ##        h1 <===> s1 <====> s2 <===> h2                                   ##
         ##                                                                        ##
         ############################################################################
 
@@ -108,7 +117,7 @@ class SimpleController1(app_manager.RyuApp):
 
 	    # Add forwarding rule in s1
         if msg.datapath.id == 1:
-            # For h1-h2 flow: h1 -> s1 -> s4
+            # For h1-h2 flow: h1 -> s1 -> h2
             match = parser.OFPMatch(
                 in_port=1,
                 eth_type=0x0800,
@@ -116,49 +125,18 @@ class SimpleController1(app_manager.RyuApp):
                 ipv4_dst="10.0.0.2",
                 ip_proto=17,
                 udp_dst=5566)
-            actions = [parser.OFPActionOutput(3)]
+            actions = [parser.OFPActionOutput(2)]
             self.add_flow(
                 datapath=datapath,
                 priority=3,
                 match=match,
                 actions=actions)
-            # For h2-h1 flow: s4 -> s1 -> h1
+            # For h2-h1 flow: h2 -> s1 -> h1
             match = parser.OFPMatch(
-                in_port=3,
+                in_port=2,
                 eth_type=0x0800,
                 ipv4_src="10.0.0.2",
                 ipv4_dst="10.0.0.1",
-                ip_proto=17,
-                udp_dst=5566)
-            actions = [parser.OFPActionOutput(1)]
-            self.add_flow(
-                datapath=datapath,
-                priority=3,
-                match=match,
-                actions=actions)
-
-        # Add forwarding rule in s4
-        if msg.datapath.id == 4:
-            # For h2-h1 flow: h2 -> s4 -> s1
-            match = parser.OFPMatch(
-                in_port=1,
-                eth_type=0x0800,
-                ipv4_src="10.0.0.2",
-                ipv4_dst="10.0.0.1",
-                ip_proto=17,
-                udp_dst=5566)
-            actions = [parser.OFPActionOutput(3)]
-            self.add_flow(
-                datapath=datapath,
-                priority=3,
-                match=match,
-                actions=actions)
-            # For h1-h2 flow: s1 -> s4 -> h2
-            match = parser.OFPMatch(
-                in_port=3,
-                eth_type=0x0800,
-                ipv4_src="10.0.0.1",
-                ipv4_dst="10.0.0.2",
                 ip_proto=17,
                 udp_dst=5566)
             actions = [parser.OFPActionOutput(1)]
@@ -244,3 +222,4 @@ class SimpleController1(app_manager.RyuApp):
         self.net.add_edges_from(links)
         print('*** List of links')
         print(self.net.edges())
+
