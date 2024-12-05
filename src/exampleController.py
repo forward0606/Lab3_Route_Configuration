@@ -90,7 +90,7 @@ class SimpleController1(app_manager.RyuApp):
         # Warning: may cause flooding
         match = parser.OFPMatch(
             eth_type=0x0806,
-        )
+            )
         actions = [parser.OFPActionOutput(ofproto.OFPP_FLOOD)]
         self.add_flow(
             datapath=datapath,
@@ -122,9 +122,8 @@ class SimpleController1(app_manager.RyuApp):
                 in_port=1,
                 eth_type=0x0800,
                 ipv4_src="10.0.0.1",
-                ipv4_dst="10.0.0.2",
-                ip_proto=17,
-                udp_dst=5566)
+                ipv4_dst="10.0.0.2"
+                )
             actions = [parser.OFPActionOutput(2)]
             self.add_flow(
                 datapath=datapath,
@@ -136,9 +135,8 @@ class SimpleController1(app_manager.RyuApp):
                 in_port=2,
                 eth_type=0x0800,
                 ipv4_src="10.0.0.2",
-                ipv4_dst="10.0.0.1",
-                ip_proto=17,
-                udp_dst=5566)
+                ipv4_dst="10.0.0.1"
+                )
             actions = [parser.OFPActionOutput(1)]
             self.add_flow(
                 datapath=datapath,
